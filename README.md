@@ -60,4 +60,6 @@ And the parameters of retry functions.
 Currently, we are working on the file uploading process.
 
 
+*Feel free to create an issue to improve package purpose.*  
+
 Thank you.
