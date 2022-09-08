@@ -1,39 +1,63 @@
-<!-- 
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+**App network re-try** 
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages). 
+**Benefits** 
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages). 
--->
+This package will help to re API call when the device will connect with the internet. Currently supporting POST, GET, PUT, and DELETE requests. 
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+**How to use** 
+```
+if (await sl<AppNetworkInfo>().isConnected) {
+      // call API
+    } else {
+      try {
+        Completer<http.Response> _response = await NetworkReTry().retry(
+            uri: Uri.parse(AppRemoteHelper.appUrls.source),
+            appHttpMethod: AppHttpMethod.GET);
 
-## Features
+        AppApiResponse? _appApiResponse;
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+        var _res = await _response.future;
 
-## Getting started
+        _appApiResponse = AppApiResponse.data(
+          response: _res,
+        );
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+        print("The response after re - try  ${_appApiResponse!.body}");
 
-## Usage
+        Utils.closeDialog();
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
-
-```dart
-const like = 'sample';
+        return Right(_appApiResponse);
+      } catch (err) {
+        return Left(ServerFailure(err.toString()));
+      }
+    }
 ```
 
-## Additional information
+The focus part of the above code 
 
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
+```
+  Completer<http.Response> _response = await NetworkReTry().retry(
+            uri: Uri.parse(AppRemoteHelper.appUrls.source),
+            appHttpMethod: AppHttpMethod.GET);
+```
+The retry function will return  ` Completer<http.Response>  ` type data. 
+
+And the parameters of retry functions.
+
+>       Uri? uri,
+>       Map? body,
+>       AppHttpMethod? appHttpMethod,
+>       Map<String, String>? header
+
+
+
+**How to add with flutter `pubspec.yaml` file ?**
+
+![Screenshot 2022-09-08 at 9 55 59 AM](https://user-images.githubusercontent.com/45905451/189030894-47a67f29-d4c2-4415-91da-624815bcd330.png)
+
+**What will be the next update?** 
+
+Currently, we are working on the file uploading process.
+
+
+Thank you.
